@@ -38,6 +38,6 @@ void OpenDialog::accept()
                             ui->lineEdit_connect->text(),
                             ui->lineEdit_qmf->text());
 
-    reject();;
+    hide();;
 }
 

@@ -57,6 +57,12 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     qmf->start();
 
     //
+    // Create the open connection dialog box
+    //
+    m_openDialog = new OpenDialog(this);
+    connect(m_openDialog, SIGNAL(openDialogAccepted(QString,QString,QString)), qmf, SLOT(connect_url(QString,QString,QString)));
+
+    //
     // Linkage for the menu and the Connection Status label.
     //
     connect(qmf, SIGNAL(connectionStatusChanged(QString)), label_connection_status, SLOT(setText(QString)));
@@ -107,16 +113,7 @@ int main(int argc, char *argv[])
 
 void QmfExplorer::on_actionOpen_triggered()
 {
-
-    OpenDialog* dlg = new OpenDialog(this);
-    connect(dlg, SIGNAL(openDialogAccepted(QString,QString,QString)), qmf, SLOT(connect_url(QString,QString,QString)));
-
-    dlg->exec();
-
-    //openDialog->exec();
-/*
-    QMessageBox msgBox;
-     msgBox.setText("The document has been modified.");
-     msgBox.exec();
-*/
+    if (m_openDialog) {
+        m_openDialog->exec();
+    }
 }

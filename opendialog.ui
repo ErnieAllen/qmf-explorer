@@ -97,7 +97,7 @@
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
    <receiver>OpenDialog</receiver>
-   <slot>reject()</slot>
+   <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>316</x>

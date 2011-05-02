@@ -47,6 +47,8 @@ private:
     ObjectModel* objectModel;
     ObjectDetailModel* objectDetail;
 
+    OpenDialog* m_openDialog;
+
 private slots:
     void on_actionOpen_triggered();
 };

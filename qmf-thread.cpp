@@ -116,8 +116,12 @@ void QmfThread::run()
                 command_queue.pop_front();
                 if (command.connect & !connected)
                     try {
+                        emit connectionStatusChanged("QMF connection opening...");
+
                         conn = qpid::messaging::Connection(command.url, command.conn_options);
                         conn.open();
+
+                        emit connectionStatusChanged("QMF session opening...");
                         sess = qmf::ConsoleSession(conn, command.qmf_options);
                         sess.open();
                         try {

@@ -88,7 +88,7 @@
            <property name="font">
             <font>
              <family>DejaVu Sans Mono</family>
-             <pointsize>8</pointsize>
+             <pointsize>9</pointsize>
             </font>
            </property>
            <property name="editTriggers">
@@ -239,7 +239,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
