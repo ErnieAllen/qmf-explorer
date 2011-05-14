@@ -25,6 +25,7 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     setupUi(this);
 
     qRegisterMetaType<qmf::Agent>();
+    qRegisterMetaType<qmf::Data>();
 
     //
     // Create the agent model which stores the list of known agents.
@@ -84,6 +85,12 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     connect(treeView_agents, SIGNAL(clicked(QModelIndex)), agentModel, SLOT(selected(QModelIndex)));
     connect(agentModel, SIGNAL(instSelected(qmf::Agent)), agentDetail, SLOT(newAgent(qmf::Agent)));
 
+    //
+    // Linkage for Object tab components
+    //
+    connect(qmf, SIGNAL(newPackage(QString)), objectModel, SLOT(addPackage(QString)));
+    connect(qmf, SIGNAL(newClass(QStringList)), objectModel, SLOT(addClass(QStringList)));
+    connect(qmf, SIGNAL(addObject(qmf::Data)), objectModel, SLOT(addObject(qmf::Data)));
     //
     // Create linkages to enable and disable main-window components based on the connection status.
     //

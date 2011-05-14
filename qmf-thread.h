@@ -23,9 +23,13 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QLineEdit>
+#include <QStringList>
+
 #include <qpid/messaging/Connection.h>
 #include <qmf/ConsoleSession.h>
 #include <qmf/ConsoleEvent.h>
+#include <qmf/Data.h>
+#include <qmf/SchemaId.h>
 #include "agent-model.h"
 #include "object-model.h"
 #include <sstream>
@@ -49,6 +53,9 @@ signals:
     void isConnected(bool);
     void newAgent(const qmf::Agent&);
     void delAgent(const qmf::Agent&);
+    void addObject(const qmf::Data&);
+    void newPackage(const QString&);
+    void newClass(const QStringList&);
 
 protected:
     void run();

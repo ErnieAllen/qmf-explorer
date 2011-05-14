@@ -19,6 +19,8 @@
 
 #include "qmf-thread.h"
 #include <qpid/messaging/exceptions.h>
+#include <qmf/Query.h>
+
 #include <iostream>
 #include <string>
 
@@ -41,7 +43,8 @@ void QmfThread::cancel()
 void QmfThread::connect_localhost()
 {
     QMutexLocker locker(&lock);
-    command_queue.push_back(Command(true, "localhost", "", ""));
+    command_queue.push_back(Command(true, "grid0.lab.bos.redhat.com", "", ""));
+    //command_queue.push_back(Command(true, "localhost", "", ""));
     cond.wakeOne();
 }
 
@@ -80,15 +83,58 @@ void QmfThread::run()
     while(true) {
         if (connected) {
             qmf::ConsoleEvent event;
+            uint32_t pcount;
+            int i;
+
             if (sess.nextEvent(event, qpid::messaging::Duration::SECOND)) {
                 //
                 // Process the event
                 //
+                qmf::Agent agent = event.getAgent();
                 switch (event.getType()) {
-                case qmf::CONSOLE_AGENT_ADD : emit newAgent(event.getAgent()); break;
-                case qmf::CONSOLE_AGENT_DEL : emit delAgent(event.getAgent()); break;
-                default: break;
+                case qmf::CONSOLE_AGENT_ADD :
+                    emit newAgent(agent);
+                    agent.querySchemaAsync();
+                    break;
+
+                case qmf::CONSOLE_AGENT_DEL :
+                    emit delAgent(agent);
+                    break;
+
+                case qmf::CONSOLE_AGENT_SCHEMA_UPDATE :
+                    agent.querySchemaAsync();
+                    break;
+
+                case qmf::CONSOLE_AGENT_SCHEMA_RESPONSE :
+                    // The agent schema response is coming in as
+                    // an query response. This is a bug
+                case qmf::CONSOLE_QUERY_RESPONSE :
+                    // Handle the agent schema response
+                    pcount = event.getSchemaIdCount();
+                    for (uint32_t idx = 0; idx < pcount; idx++) {
+                        agent.queryAsync(qmf::Query(qmf::QUERY_OBJECT, event.getSchemaId(idx)));
+                    }
+
+                    // Handle the query response
+                    pcount = event.getDataCount();
+                    for (uint32_t idx = 0; idx < pcount; idx++) {
+                        emit addObject(event.getData(idx));
+                    }
+
+                    break;
+
+                case qmf::CONSOLE_METHOD_RESPONSE :
+                    i=2;
+                    break;
+
+                case qmf::CONSOLE_EVENT :
+                    i=3;
+                    //emit addEvent(event.getData(0));
+                    break;
+                default :
+                    break;
                 }
+
             }
 
             {
