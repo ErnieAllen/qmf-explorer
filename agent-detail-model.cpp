@@ -74,6 +74,7 @@ int AgentDetailModel::rowCount(const QModelIndex &parent) const
 
 int AgentDetailModel::columnCount(const QModelIndex &parent) const
 {
+    QModelIndex p = parent;
     return 2;
 }
 
@@ -90,6 +91,7 @@ QVariant AgentDetailModel::data(const QModelIndex &index, int role) const
     case 0: return keys.at(index.row());
     case 1: return values.at(index.row());
     }
+    return 0;
 }
 
 
@@ -107,6 +109,7 @@ QVariant AgentDetailModel::headerData(int section, Qt::Orientation orientation, 
 
 QModelIndex AgentDetailModel::parent(const QModelIndex& index) const
 {
+    QModelIndex i = index;
     //
     // Not a tree structure, no parents.
     //

@@ -26,6 +26,7 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
 
     qRegisterMetaType<qmf::Agent>();
     qRegisterMetaType<qmf::Data>();
+    qRegisterMetaType<qmf::ConsoleEvent>();
 
     //
     // Create the agent model which stores the list of known agents.
@@ -50,6 +51,12 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     //
     objectDetail = new ObjectDetailModel(this);
     tableView_object->setModel(objectDetail);
+
+    //
+    // Create the event detail model to hold the event properties
+    //
+    eventDetail = new EventDetailModel(this);
+    tableView_events->setModel(eventDetail);
 
     //
     // Create the thread object that maintains communication with the messaging plane.
@@ -78,12 +85,12 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     //
     // Linkage for the Agent List tab components
     //
-    connect(qmf, SIGNAL(newAgent(qmf::Agent)), agentModel, SLOT(addAgent(qmf::Agent)));
-    connect(qmf, SIGNAL(delAgent(qmf::Agent)), agentModel, SLOT(delAgent(qmf::Agent)));
-    connect(qmf, SIGNAL(isConnected(bool)),    agentModel, SLOT(clear()));
-    connect(qmf, SIGNAL(isConnected(bool)),    agentDetail, SLOT(clear()));
-    connect(treeView_agents, SIGNAL(clicked(QModelIndex)), agentModel, SLOT(selected(QModelIndex)));
-    connect(agentModel, SIGNAL(instSelected(qmf::Agent)), agentDetail, SLOT(newAgent(qmf::Agent)));
+    connect(qmf,             SIGNAL(newAgent(qmf::Agent)),     agentModel,  SLOT(addAgent(qmf::Agent)));
+    connect(qmf,             SIGNAL(delAgent(qmf::Agent)),     agentModel,  SLOT(delAgent(qmf::Agent)));
+    connect(qmf,             SIGNAL(isConnected(bool)),        agentModel,  SLOT(clear()));
+    connect(qmf,             SIGNAL(isConnected(bool)),        agentDetail, SLOT(clear()));
+    connect(treeView_agents, SIGNAL(clicked(QModelIndex)),     agentModel,  SLOT(selected(QModelIndex)));
+    connect(agentModel,      SIGNAL(instSelected(qmf::Agent)), agentDetail, SLOT(newAgent(qmf::Agent)));
 
     //
     // Linkage for Object tab components
@@ -91,6 +98,14 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     connect(qmf, SIGNAL(newPackage(QString)), objectModel, SLOT(addPackage(QString)));
     connect(qmf, SIGNAL(newClass(QStringList)), objectModel, SLOT(addClass(QStringList)));
     connect(qmf, SIGNAL(addObject(qmf::Data)), objectModel, SLOT(addObject(qmf::Data)));
+    connect(treeView_objects, SIGNAL(clicked(QModelIndex)), objectModel, SLOT(selected(QModelIndex)));
+    connect(objectModel, SIGNAL(instSelected(qmf::Data)), objectDetail, SLOT(newObject(qmf::Data)));
+
+    //
+    // Linkage for the Event tab table
+    //
+    connect(qmf, SIGNAL(newEvent(qmf::ConsoleEvent)), eventDetail, SLOT(newEvent(qmf::ConsoleEvent)));
+
     //
     // Create linkages to enable and disable main-window components based on the connection status.
     //
@@ -98,6 +113,22 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     connect(qmf, SIGNAL(isConnected(bool)), actionOpen_Localhost, SLOT(setDisabled(bool)));
     connect(qmf, SIGNAL(isConnected(bool)), actionOpen,           SLOT(setDisabled(bool)));
     connect(qmf, SIGNAL(isConnected(bool)), actionClose,          SLOT(setEnabled(bool)));
+}
+
+void QmfExplorer::init(int argc, char *argv[])
+{
+    QString url("localhost");
+    QString connectionOptions;
+    QString sessionOptions;
+
+    if (argc > 1)
+        url = QString(argv[1]);
+    if (argc > 2)
+        connectionOptions = QString(argv[2]);
+    if (argc > 3)
+        sessionOptions = QString(argv[3]);
+
+    qmf->connect_url(url, connectionOptions, sessionOptions);
 }
 
 QmfExplorer::~QmfExplorer()
@@ -115,6 +146,8 @@ int main(int argc, char *argv[])
     QmfExplorer qe(window);
 
     qe.show();
+    qe.init(argc, argv);
+
     return app.exec();
 }
 

@@ -26,6 +26,8 @@ using std::endl;
 AgentModel::AgentModel(QObject* parent) : QAbstractItemModel(parent), nextId(1)
 {
     // Intentionally Left Blank
+    qmf::Agent a;
+    a.getInstance();
 }
 
 
@@ -191,20 +193,21 @@ int AgentModel::rowCount(const QModelIndex &parent) const
     // For parents that are vendor or product, return the number of children.
     //
     switch (ptr->nodeType) {
+    case NODE_INSTANCE:
+        // For instance nodes, return 0 because there are no children.
+        return 0;
     case NODE_VENDOR:
     case NODE_PRODUCT:
         return (int) ptr->children.size();
     }
 
-    //
-    // For instance nodes, return 0 because there are no children.
-    //
     return 0;
 }
 
 
 int AgentModel::columnCount(const QModelIndex &parent) const
 {
+    QModelIndex p = parent;
     return 1;
 }
 
@@ -305,6 +308,8 @@ QModelIndex AgentModel::index(int row, int column, const QModelIndex &parent) co
     // Create an index for the child data record.
     //
     switch (ptr->nodeType) {
+    case NODE_INSTANCE:
+        return QModelIndex();
     case NODE_VENDOR:
     case NODE_PRODUCT:
         count = 0;

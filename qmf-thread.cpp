@@ -43,8 +43,7 @@ void QmfThread::cancel()
 void QmfThread::connect_localhost()
 {
     QMutexLocker locker(&lock);
-    command_queue.push_back(Command(true, "grid0.lab.bos.redhat.com", "", ""));
-    //command_queue.push_back(Command(true, "localhost", "", ""));
+    command_queue.push_back(Command(true, "localhost", "", ""));
     cond.wakeOne();
 }
 
@@ -128,8 +127,7 @@ void QmfThread::run()
                     break;
 
                 case qmf::CONSOLE_EVENT :
-                    i=3;
-                    //emit addEvent(event.getData(0));
+                    emit newEvent(event);
                     break;
                 default :
                     break;

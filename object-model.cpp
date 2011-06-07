@@ -223,6 +223,8 @@ int ObjectModel::rowCount(const QModelIndex &parent) const
     // For parents that are package or schema, return the number of children.
     //
     switch (ptr->nodeType) {
+    case NODE_INSTANCE:
+        return 0;
     case NODE_PACKAGE:
     case NODE_SCHEMA:
         return (int) ptr->children.size();

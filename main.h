@@ -20,14 +20,14 @@
  */
 
 #include <QtGui>
-#include <qmf/ConsoleEvent.h>
 #include "ui_explorer_main.h"
 #include "opendialog.h"
 #include "qmf-thread.h"
 #include "agent-model.h"
-#include "agent-detail-model.h"
 #include "object-model.h"
+#include "agent-detail-model.h"
 #include "object-detail-model.h"
+#include "event-detail-model.h"
 
 class QmfExplorer : public QMainWindow, private Ui::MainWindow {
     Q_OBJECT
@@ -35,6 +35,8 @@ class QmfExplorer : public QMainWindow, private Ui::MainWindow {
 public:
     QmfExplorer(QMainWindow* parent = 0);
     ~QmfExplorer();
+
+    void init(int argc, char *argv[]);
 
 public slots:
 
@@ -47,7 +49,10 @@ private:
     ObjectModel* objectModel;
     ObjectDetailModel* objectDetail;
 
+    EventDetailModel* eventDetail;
+
     OpenDialog* m_openDialog;
+
 
 private slots:
     void on_actionOpen_triggered();

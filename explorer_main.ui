@@ -204,28 +204,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <widget class="QTableWidget" name="tableWidget">
-          <column>
-           <property name="text">
-            <string>Timestamp</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Agent</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Event</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Data</string>
-           </property>
-          </column>
-         </widget>
+         <widget class="QTableView" name="tableView_events"/>
         </item>
        </layout>
       </widget>
@@ -239,7 +218,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

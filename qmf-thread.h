@@ -56,6 +56,7 @@ signals:
     void addObject(const qmf::Data&);
     void newPackage(const QString&);
     void newClass(const QStringList&);
+    void newEvent(const qmf::ConsoleEvent&);
 
 protected:
     void run();

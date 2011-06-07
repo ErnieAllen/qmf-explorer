@@ -16,7 +16,8 @@ SOURCES += main.cpp\
     object-detail-model.cpp \
     object-model.cpp \
     qmf-thread.cpp \
-    opendialog.cpp
+    opendialog.cpp \
+    event-detail-model.cpp
 
 HEADERS  += \
     agent-detail-model.h \
@@ -25,7 +26,8 @@ HEADERS  += \
     object-detail-model.h \
     object-model.h \
     qmf-thread.h \
-    opendialog.h
+    opendialog.h \
+    event-detail-model.h
 
 FORMS    += \
     explorer_main.ui \
