@@ -57,6 +57,7 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     //
     eventDetail = new EventDetailModel(this);
     tableView_events->setModel(eventDetail);
+    tableView_events->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     //
     // Create the thread object that maintains communication with the messaging plane.
@@ -105,6 +106,7 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     // Linkage for the Event tab table
     //
     connect(qmf, SIGNAL(newEvent(qmf::ConsoleEvent)), eventDetail, SLOT(newEvent(qmf::ConsoleEvent)));
+    connect(qmf, SIGNAL(newEvent(qmf::ConsoleEvent)), tableView_events, SLOT(resizeColumnsToContents()));
 
     //
     // Create linkages to enable and disable main-window components based on the connection status.

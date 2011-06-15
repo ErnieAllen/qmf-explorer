@@ -169,7 +169,9 @@ void QmfThread::run()
                         sess = qmf::ConsoleSession(conn, command.qmf_options);
                         sess.open();
                         try {
-                            sess.setAgentFilter(agentFilter->text().toStdString());
+                            sess.setAgentFilter("[eq, _product, [quote, 'qpidd']]");
+
+                            //sess.setAgentFilter(agentFilter->text().toStdString());
                         } catch (std::exception&) {}
                         connected = true;
                         emit isConnected(true);

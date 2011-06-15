@@ -52,6 +52,7 @@ public slots:
 private:
     QStringList timeStamps;
     QStringList severities;
+    QStringList names;
     QStringList properties;
 
 };
