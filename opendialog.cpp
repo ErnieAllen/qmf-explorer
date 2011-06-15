@@ -19,16 +19,19 @@
 
 #include "opendialog.h"
 #include "ui_opendialog.h"
+#include <QSettings>
 
 OpenDialog::OpenDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::OpenDialog)
 {
     ui->setupUi(this);
+    restoreSettings();
 }
 
 OpenDialog::~OpenDialog()
 {
+    saveSettings();
     delete ui;
 }
 
@@ -41,3 +44,23 @@ void OpenDialog::accept()
     hide();;
 }
 
+void OpenDialog::saveSettings() {
+    QSettings settings;
+
+    settings.beginGroup("OpenConnection");
+    settings.setValue("url",     ui->lineEdit_url->text());
+    settings.setValue("connect", ui->lineEdit_connect->text());
+    settings.setValue("qmf",     ui->lineEdit_qmf->text());
+    settings.endGroup();
+
+}
+
+void OpenDialog::restoreSettings() {
+    QSettings settings;
+
+    settings.beginGroup("OpenConnection");
+    ui->lineEdit_url->setText(QString(settings.value("url").toString()));
+    ui->lineEdit_connect->setText(QString(settings.value("connect").toString()));
+    ui->lineEdit_qmf->setText(QString(settings.value("qmf", "{strict-security:False}").toString()));
+    settings.endGroup();
+}

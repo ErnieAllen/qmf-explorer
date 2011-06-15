@@ -43,7 +43,7 @@ void QmfThread::cancel()
 void QmfThread::connect_localhost()
 {
     QMutexLocker locker(&lock);
-    command_queue.push_back(Command(true, "localhost", "", ""));
+    command_queue.push_back(Command(true, "localhost", "", "{strict-security:False}"));
     cond.wakeOne();
 }
 

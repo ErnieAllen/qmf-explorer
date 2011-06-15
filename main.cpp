@@ -29,6 +29,13 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     qRegisterMetaType<qmf::ConsoleEvent>();
 
     //
+    // Setup some global app vales to be used by the QSettings class
+    //
+    QCoreApplication::setOrganizationName("Red Hat");
+    QCoreApplication::setOrganizationDomain("redhat.com");
+    QCoreApplication::setApplicationName("QMF-Explorer");
+
+    //
     // Create the agent model which stores the list of known agents.
     //
     agentModel = new AgentModel(this);
@@ -56,7 +63,14 @@ QmfExplorer::QmfExplorer(QMainWindow* parent) : QMainWindow(parent)
     // Create the event detail model to hold the event properties
     //
     eventDetail = new EventDetailModel(this);
-    tableView_events->setModel(eventDetail);
+
+    //
+    // Ctrate a proxy model to enable sorting by column
+    //
+    eventtProxyModel = new QSortFilterProxyModel(this);
+    eventtProxyModel->setSourceModel(eventDetail);
+
+    tableView_events->setModel(eventtProxyModel);
     tableView_events->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     //

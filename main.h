@@ -50,6 +50,7 @@ private:
     ObjectDetailModel* objectDetail;
 
     EventDetailModel* eventDetail;
+    QSortFilterProxyModel* eventtProxyModel;
 
     OpenDialog* m_openDialog;
 

@@ -42,6 +42,8 @@ signals:
 
 private:
     Ui::OpenDialog *ui;
+    void saveSettings();
+    void restoreSettings();
 };
 
 #endif // OPENDIALOG_H
